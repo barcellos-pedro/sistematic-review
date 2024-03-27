@@ -34,4 +34,4 @@ completion = client.chat.completions.create(
 
 result = completion.choices[0].message.content
 
-print(f"Resultado: {result}")  # Yes, No or Maybe
+print(f"Resultado: {result}")
