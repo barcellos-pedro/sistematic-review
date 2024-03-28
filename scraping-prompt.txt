@@ -1,0 +1,13 @@
+You will be provided with a html page source code.
+I am only interested in the content/value from it and not some code snippet.
+
+The html page will be about a scientific research.
+Search the code for the research title and the abstract/description.
+
+If you cannot parse the title or the abstract, fill the columns with an empty string.
+If the page is a PDF, fill the title column with the respective title
+and the abstract column with 'PDF' value.
+
+I want the result output to be in a CSV format, the headers are: title and abstract.
+For every row, end with a comma.
+Leave only one trailing newline after the last row.

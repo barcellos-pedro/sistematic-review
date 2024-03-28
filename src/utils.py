@@ -1,45 +1,37 @@
-prompt = """
-Você é um professor de universidade que precisa fazer revisões sistemáticas de artigos para auxiliar alunos do ensino superior que estão se preparando para realizarem iniciação científica e/ou pesquisas.
-
-Você irá receber o título e resumo (abstract) de um artigo e deverá responder se o artigo deve ser revisado ou não com base no objetivo da pesquisa e critérios de exclusão.
-
-Caso o resumo do artigo não se enquadre em um dos resultados possíveis, marque a classificação como "n\a"
+review_prompt = """
+Você é um professor de universidade que precisa fazer revisões sistemáticas de artigos para auxiliar alunos do ensino superior que estão se preparando para pesquisas.
+Você irá receber o título e resumo (abstract) do artigo e deverá responder se o artigo deve ser revisado ou não com base no objetivo da pesquisa e critérios de exclusão.
+Caso o resumo do artigo não se enquadre em um dos resultados possíveis, retorne 'n/a'
 
 ## Objetivo da pesquisa
-
 Métodos, dificuldades ou analises do Ensino de linguagens de programação/logica de programação pra iniciantes adultos (não pode ser de crianças nem adolescentes)
 
 ## Possíveis resultados/classificações
-
 - Sim
 - Não
 - Talvez
 
 ## Critérios de exclusão
-
 - Trabalhos não disponíveis para leitura completa (download ou online)
-
 - Artigos com o  mesmo  autor,  resumo,  data  de  publicação
-
 - Como nossa análise está centrada em um revisão sistemática, os estudos com a mesma finalidade deverão ser excluídos
-
 - Investigações que sejam educacionais, mas de áreas diferentes do foco de análise
-
 - Investigações que sejam somente tecnicos, mas não abordem tópicos educacionais
-
 - Estudos relacionados ao ensino de programação na Educação Infantil ou fundamental 1 e 2
-
 - Artigos escritos de 2014 a 2024
-
 - Linguagens de programação existentes atualmente
-
 - Não ser artigo de inteligencia artificial
-
 - Não ser relacionado a saúde
-
 - Não ser uma revisão sistematica
-
 - Trabalhos que foram resutados ou comprovadamente incorretos
+"""
+
+parse_content_prompt = """
+You will be provided with a html page source code. I am only interested in the content/value from it, no code snippet.
+The html page will be about a scientific research. Search the source code for the research title and the abstract/description.
+The result output has be in JSON so I can parse in my Python script.
+If you cannot parse the title or the abstract, fill the values with an empty string.
+If the page is a PDF, fill the the abstract field with 'PDF' value.
 """
 
 source_code = """
@@ -839,3 +831,177 @@ j$('document').ready(function(){
 	</body>
 </html>
 """
+
+source_code_pdf = """
+
+
+
+
+
+
+
+<APM_DO_NOT_TOUCH>
+
+<script type="text/javascript">
+(function(){
+window.FVCl=!!window.FVCl;try{(function(){(function(){})();var b=72;try{var aa,ca,na=c(971)?0:1,ra=c(17)?1:0,sa=c(869)?0:1,ta=c(72)?1:0,ua=c(450)?0:1,ya=c(936)?0:1;for(var za=(c(334),0);za<ca;++za)na+=c(850)?1:2,ra+=(c(488),2),sa+=(c(75),2),ta+=(c(775),2),ua+=(c(862),2),ya+=c(738)?1:3;aa=na+ra+sa+ta+ua+ya;window.Qa===aa&&(window.Qa=++aa)}catch(a){window.Qa=aa}var e=!0;function f(a){var d=arguments.length,g=[];for(var h=1;h<d;++h)g.push(arguments[h]-a);return String.fromCharCode.apply(String,g)}
+function Da(a){var d=21;a&&(document[f(d,139,126,136,126,119,126,129,126,137,142,104,137,118,137,122)]&&document[q(d,139,126,136,126,119,126,129,126,137,142,104,137,118,137,122)]!==q(d,139,126,136,126,119,129,122)||(e=!1));return e}function q(a){var d=arguments.length,g=[];for(var h=1;h<d;h++)g[h-1]=arguments[h]-a;return String.fromCharCode.apply(String,g)}function Ea(){}Da(window[Ea[t(1086782,b)]]===Ea);Da(typeof ie9rgb4!==t(1242178186127,b));
+Da(RegExp("\x3c")[t(1372133,b)](function(){return"\x3c"})&!RegExp(q(b,192,123,172))[t(1372133,b)](function(){return"'x3'+'d';"}));
+var Fa=window[q(b,169,188,188,169,171,176,141,190,173,182,188)]||RegExp(q(b,181,183,170,177,196,169,182,172,186,183,177,172),t(-54,b))[t(1372133,b)](window["\x6e\x61vi\x67a\x74\x6f\x72"]["\x75\x73e\x72A\x67\x65\x6et"]),Ja=+new Date+(c(964)?789199:6E5),Ka,La,Ma,Na=window[q(b,187,173,188,156,177,181,173,183,189,188)],Oa=Fa?c(934)?24579:3E4:c(166)?6E3:8663;
+document[f(b,169,172,172,141,190,173,182,188,148,177,187,188,173,182,173,186)]&&document[f(b,169,172,172,141,190,173,182,188,148,177,187,188,173,182,173,186)](f(b,190,177,187,177,170,177,180,177,188,193,171,176,169,182,175,173),function(a){var d=46;document[f(d,164,151,161,151,144,151,154,151,162,167,129,162,143,162,147)]&&(document[q(d,164,151,161,151,144,151,154,151,162,167,129,162,143,162,147)]===t(1058781937,d)&&a[q(d,151,161,130,160,163,161,162,147,146)]?Ma=!0:document[q(d,164,151,161,151,144,
+151,154,151,162,167,129,162,143,162,147)]===f(d,164,151,161,151,144,154,147)&&(Ka=+new Date,Ma=!1,w()))});function w(){if(!document[f(85,198,202,186,199,206,168,186,193,186,184,201,196,199)])return!0;var a=+new Date;if(a>Ja&&(c(525)?607046:6E5)>a-Ka)return Da(!1);var d=Da(La&&!Ma&&Ka+Oa<a);Ka=a;La||(La=!0,Na(function(){La=!1},c(968)?0:1));return d}w();var Pa=[c(905)?17355141:17795081,c(314)?2147483647:27611931586,c(713)?1434569896:1558153217];
+function Sa(a){var d=80;a=typeof a===t(1743045596,d)?a:a[f(d,196,191,163,196,194,185,190,183)](c(754)?33:36);var g=window[a];if(!g||!g[q(d,196,191,163,196,194,185,190,183)])return;var h=""+g;window[a]=function(k,l){La=!1;return g(k,l)};window[a][f(d,196,191,163,196,194,185,190,183)]=function(){return h}}for(var Ua=(c(879),0);Ua<Pa[t(1294399133,b)];++Ua)Sa(Pa[Ua]);Da(!1!==window[q(b,142,158,139,180)]);window.Ga=window.Ga||{};window.Ga.Wb="082b87e5a519400047b5b05ccd0f90ed8a7d11776a2927603151f7faf985e01bb3aed9b928b242b3adfa38a8ab5288ec7ac36f1922ff637880c89b36119c6505931c7a347548d917";
+function B(a){var d=+new Date;if(!document[q(72,185,189,173,186,193,155,173,180,173,171,188,183,186,137,180,180)]||d>Ja&&(c(838)?795738:6E5)>d-Ka)var g=Da(!1);else g=Da(La&&!Ma&&Ka+Oa<d),Ka=d,La||(La=!0,Na(function(){La=!1},c(357)?0:1));return!(arguments[a]^g)}function t(a,d){a+=d;return a.toString(36)}function c(a){return 277>a}(function Wa(a){return a?0:Wa(a)*Wa(a)})(!0);})();}catch(x){}finally{ie9rgb4=void(0);};function ie9rgb4(a,b){return a>>b>>0};
+
+})();
+
+</script>
+</APM_DO_NOT_TOUCH>
+
+<script type="text/javascript" src="/TSPD/0807dc117eab2000e77fe62752612f63ffb7dfa1f099d56d644118442a235696b2dfbc0c2067cd88?type=9"></script>
+<script type="text/javascript" src="/assets/vendor/jquery/jquery-3.5.1.min.js?cv=20240305_000000" charset="utf-8"></script>
+
+<!-- Fingerprint Cookie -->
+<script type="text/javascript" src="/assets/vendor/js-cookie/src/js.cookie.js?cv=20240305_000000"></script>
+
+
+
+	<script type="text/javascript" src="/assets/vendor/fingerprintjs2/fingerprint2.js?cv=20240305_000000"></script>
+	<script type="text/javascript" src="/assets/dist/js/fingerprint/fingerprint.js?cv=20240305_000000"></script>
+	<script type="text/javascript">Xplore.Fingerprint.init();</script>
+
+<!-- BEGIN: tealium in stamp/stamp.jsp. NOTE stamp.jsp does not use template.jsp, nor include common/assets.jsp, so including tealiumAnalytics.jsp here -->
+
+
+
+
+
+
+
+
+		<!-- BEGIN: TealiumAnalytics.jsp -->
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			
+				
+			
+			
+			
+			
+		
+		
+		
+		
+		
+		
+
+			<script type ="text/javascript">
+ 				// tealium config vars
+				var TEALIUM_CONFIG_TAGGING_ENABLED = true;		
+				var TEALIUM_CONFIG_CDN_URL = '//tags.tiqcdn.com/utag/';
+				var TEALIUM_CONFIG_ACCOUNT_PROFILE_ENV = 'ieeexplore/main/prod';
+				
+				// tealium utag_data values for user 
+				var TEALIUM_userType = 'Anonymous';
+				var TEALIUM_userInstitutionId = '';
+				var TEALIUM_userId = '';
+				var TEALIUM_user_third_party = '';
+				
+				var TEALIUM_products = '';
+			</script>
+
+
+			<script type="text/javascript">
+			// asynchronously load tealium's utag.js , which declares tealium JS variables like; utag_data, utag
+			(function(a,b,c,d){
+			
+				a=TEALIUM_CONFIG_CDN_URL + TEALIUM_CONFIG_ACCOUNT_PROFILE_ENV + '/utag.js';
+				b=document;c='script';d=b.createElement(c);d.src=a;
+				d.type='text/java'+c;d.async=true;
+				a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
+			})();
+			</script>
+
+			<script type="text/javascript" src="/assets/dist/js/analytics/tealiumTagsData.js?cv=20240305_000000"></script>
+			<script type="text/javascript" src="/assets/dist/js/analytics/tealiumAnalytics.js?cv=20240305_000000"></script>
+
+
+		
+ 		
+		<!-- END: TealiumAnalytics.jsp -->
+			 
+
+<!-- END: tealium in stamp/stamp.jsp -->	
+
+
+
+<html lang="en-US">
+	<head>	
+		<link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+		<title>IEEE Xplore Full-Text PDF: </title>
+		
+
+
+
+
+
+
+	
+	
+		<meta name="parsely-type" content="index" />
+	
+
+
+
+
+		<style>
+			html {
+			    margin: 0;
+			    padding: 0;
+			    overflow: hidden;
+			}
+			body {
+			    margin: 0;
+			    padding: 0;
+			}
+			iframe {
+				display: block;
+				position: fixed;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<iframe src="https://ieeexplore.ieee.org/ielx7/7054730/9160441/09056993.pdf?tp=&arnumber=9056993&isnumber=9160441&ref=" frameborder=0></iframe>
+		
+
+
+
+<script>
+	window.PARSELY = window.PARSELY || {
+	    use_localstorage: true
+	};
+</script>
+<script id="parsely-cfg" src="//cdn.parsely.com/keys/ieeexplore.ieee.org/p.js"></script>
+
+
+	</body>
+</html>
+
+
+
+
+"""
+
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"

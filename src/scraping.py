@@ -1,28 +1,53 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = "https://ieeexplore.ieee.org/document/9056993"
+from src.utils import user_agent
 
 headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+    "User-Agent": user_agent
 }
 
-response = requests.get(url, headers=headers)
 
-if response.status_code == 200:
-    soup = BeautifulSoup(response.text, "html.parser")
+def scrape_page(url, raw=True):
+    if raw is False:
+        return scrape_page_json(url)
+    else:
+        return scrape_page_raw(url)
 
-    print(response.text)  # all html content
-    # print(soup.get_text())  # all content
 
-    # title_tag = soup.find('title')
-    # title = title_tag.text if title_tag else "Title not found"
+def scrape_page_json(url):
+    """
+    Currently works with pages from: https://ieeexplore.ieee.org
+    """
 
-    # description_tag = soup.find('meta', attrs={'property': 'og:description'})
-    # description = description_tag['content'] if description_tag else "Description not found"
+    response = requests.get(url, headers=headers)
 
-    # print(f"[Title]\n{title}")
-    # print(f"[Description]\n {description}")
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, "html.parser")
+        # print(soup.get_text())  # get all content
 
-else:
-    print(f"Failed to get page. Status code: {response.status_code}")
+        # Find the title element
+        title_element = soup.find('title')
+
+        # Extract the title text
+        title = title_element.text.strip()
+
+        # Find the meta tag containing the abstract/description
+        abstract_meta_tag = soup.find('meta', attrs={'name': 'Description'})
+
+        # Extract the abstract/description text
+        abstract = abstract_meta_tag['content'].strip()
+
+        return {"title": title, "abstract": abstract}
+    else:
+        print(f"Error | Status code: {response.status_code}")
+
+
+def scrape_page_raw(url):
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        # get source code (ctrl+u in browser)
+        return response.text
+    else:
+        print(f"Error | Status code: {response.status_code}")

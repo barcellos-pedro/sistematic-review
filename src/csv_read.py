@@ -12,7 +12,7 @@ with open(file=file_path, mode='r', encoding="utf-8") as csv_file:
 
     for row in reader:
         count += 1
-        artigo, url = article = row["Artigo"], row["URL"]
-        print(artigo[:15], url[12:-10])
+        artigo, url = row["Artigo"], row["URL"]
+        print(artigo, url)
 
     print(f"Processed {count} lines")

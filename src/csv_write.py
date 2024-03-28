@@ -2,7 +2,7 @@ import os
 from csv import DictWriter
 
 current_dir = os.getcwd()
-file_path = os.path.join(current_dir, "dados.csv")
+file_path = os.path.join(current_dir, "result.csv")
 
 fields = ["Artigo", "URL"]
 
