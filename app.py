@@ -2,14 +2,16 @@ import os
 import time
 from csv import DictReader, DictWriter
 
+import openai
+
 from src.chat_review import review_article
 from src.chat_scraping import parse_content
 from src.scraping import scrape_page
 
 root_dir = os.getcwd()
 
-input_file_path = os.path.join(root_dir, "sample.csv")
-output_file_path = os.path.join(root_dir, "sample-result.csv")
+input_file_path = os.path.join(root_dir, "pendentes.csv")
+output_file_path = os.path.join(root_dir, "resultado.csv")
 
 start = time.time()
 count = 0
@@ -52,6 +54,17 @@ with open(file=input_file_path, mode='r', encoding="utf-8") as csv_input:
                     "review": review,
                     "error": "no"
                 })
+            except openai.RateLimitError as e:
+                print(f"OpenAI API request exceeded rate limit: {e}")
+
+                end = time.time()
+                bench = end - start
+
+                print("\n✅ Review done")
+                print(f"{count} files. {errors} errors.")
+                print(f"⏱️ Elapsed time: {bench:.2f}")
+
+                exit(1)
             except Exception as error:
                 errors += 1
 
@@ -63,7 +76,7 @@ with open(file=input_file_path, mode='r', encoding="utf-8") as csv_input:
                 })
             finally:
                 count += 1
-                print(".", end="")
+                print(count, end=" ")
 
 
 end = time.time()

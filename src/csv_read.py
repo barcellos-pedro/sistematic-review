@@ -2,7 +2,7 @@ import os
 from csv import DictReader
 
 current_dir = os.getcwd()
-file_path = os.path.join(current_dir, "sample.csv")
+file_path = os.path.join(current_dir, "pendentes.csv")
 
 # Read file
 with open(file=file_path, mode='r', encoding="utf-8") as csv_file:
