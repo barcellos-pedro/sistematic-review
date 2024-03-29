@@ -14,7 +14,7 @@ client = OpenAI(api_key=API_KEY)
 
 def review_article(article):
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4-turbo-preview",
         max_tokens=10,
         messages=[
             {
@@ -25,7 +25,6 @@ def review_article(article):
                 "role": "user",
                 "content": f"""
                     {article['title']}
-
                     {article['abstract']}
                 """
             }

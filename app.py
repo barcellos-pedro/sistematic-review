@@ -13,25 +13,26 @@ output_file_path = os.path.join(root_dir, "sample-result.csv")
 
 start = time.time()
 count = 0
+errors = 0
 
-print("Starting review...")
+print("🤖 Start review")
 
 with open(file=input_file_path, mode='r', encoding="utf-8") as csv_input:
     reader = DictReader(csv_input, delimiter=",")
 
-    with open(file=output_file_path, mode="a", encoding='utf-8', newline='') as csv_output:
-        writer = DictWriter(
-            csv_output,
-            fieldnames=['title', 'url', 'review', 'error'],
-            lineterminator="\n"
-        )
+    # Read file line by line
+    for row in reader:
+        with open(file=output_file_path, mode="a", encoding='utf-8', newline='') as csv_output:
+            writer = DictWriter(
+                csv_output,
+                fieldnames=['title', 'url', 'review', 'error'],
+                lineterminator="\n"
+            )
 
-        # If output file is empty, write headers
-        if os.stat(output_file_path).st_size == 0:
-            writer.writeheader()
+            # If output file is empty, write headers
+            if os.stat(output_file_path).st_size == 0:
+                writer.writeheader()
 
-        # Read file line by line
-        for row in reader:
             title, url = row["title"], row["url"]
 
             try:
@@ -39,7 +40,7 @@ with open(file=input_file_path, mode='r', encoding="utf-8") as csv_input:
                 article_html = scrape_page(url)
 
                 # Extract Title and Abstract from page as JSON
-                article_json = parse_content(article_html, split=False)
+                article_json = parse_content(article_html)
 
                 # Review Content and get result (Yes, No, Maybe)
                 review = review_article(article_json)
@@ -52,6 +53,8 @@ with open(file=input_file_path, mode='r', encoding="utf-8") as csv_input:
                     "error": "no"
                 })
             except Exception as error:
+                errors += 1
+
                 writer.writerow({
                     "title": title,
                     "url": url,
@@ -60,9 +63,12 @@ with open(file=input_file_path, mode='r', encoding="utf-8") as csv_input:
                 })
             finally:
                 count += 1
-                print(count)
+                print(".", end="")
 
 
 end = time.time()
+bench = end - start
 
-print(f"Review done. Elapsed time: {end - start}")
+print("\n✅ Review done")
+print(f"{count} files. {errors} errors.")
+print(f"⏱️ Elapsed time: {bench:.2f}")
