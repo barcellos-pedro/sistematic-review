@@ -2,7 +2,7 @@ import os
 from csv import DictReader
 
 current_dir = os.getcwd()
-file_path = os.path.join(current_dir, "dados.csv")
+file_path = os.path.join(current_dir, "sample.csv")
 
 # Read file
 with open(file=file_path, mode='r', encoding="utf-8") as csv_file:
@@ -12,7 +12,7 @@ with open(file=file_path, mode='r', encoding="utf-8") as csv_file:
 
     for row in reader:
         count += 1
-        artigo, url = row["Artigo"], row["URL"]
-        print(artigo, url)
+        c1, c2 = row["title"], row["url"]
+        print(c1, c2)
 
     print(f"Processed {count} lines")

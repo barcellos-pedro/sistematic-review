@@ -1,3 +1,12 @@
+import tiktoken
+
+
+def num_tokens(string, encoding_name="gpt-3.5-turbo"):
+    encoding = tiktoken.encoding_for_model(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
+
+
 review_prompt = """
 Você é um professor de universidade que precisa fazer revisões sistemáticas de artigos para auxiliar alunos do ensino superior que estão se preparando para pesquisas.
 Você irá receber o título e resumo (abstract) do artigo e deverá responder se o artigo deve ser revisado ou não com base no objetivo da pesquisa e critérios de exclusão.
@@ -30,7 +39,7 @@ parse_content_prompt = """
 You will be provided with a html page source code. I am only interested in the content/value from it, no code snippet.
 The html page will be about a scientific research. Search the source code for the research title and the abstract/description.
 The result output has be in JSON so I can parse in my Python script.
-If you cannot parse the title or the abstract, fill the values with an empty string.
+If you cannot parse or obtain the desired values for title/abstract for whatever reason,fill the values with an empty string.
 If the page is a PDF, fill the the abstract field with 'PDF' value.
 """
 
